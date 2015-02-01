@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>Turf.js Fun | Kitty Hurley</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+<link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+<style>
+	body { 
+		margin:0; 
+		padding:0; 
+	}
+	#map { 
+		position:absolute; 
+		top:0; 
+		bottom:0; 
+		width:100%; 
+	}
+	.modal {
+    	display:block;
+	}
+	.modal-body {
+		max-height: 275px;
+		overflow-y: auto;
+	}
+</style>
+</head>
+
+<body>
+
+<div id='map'></div>
+
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<script src="https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.js"></script>
+<script src="data/mnAsthmaCounties.js"></script>
+<script src="//api.tiles.mapbox.com/mapbox.js/plugins/turf/v1.3.0/turf.min.js"></script>
+
+<script>	
+
+	// Modal JavaScript
+	$(document).ready(function () {
+		$('#classificationModal').modal('show');
+	});
+
+	L.mapbox.accessToken = 'pk.eyJ1IjoiaG9ja2V5ZHVjazMwIiwiYSI6InE4cmFHNlUifQ.X5m_TSatNjZs6Vc7B3_m2A'; //Mapbox access token
+	var map = L.mapbox.map('map', 'hockeyduck30.l2dfdklm') //Mapbox project ID
+    	.setView([46.657, -95.801], 6); //Map extent
+	
+	// Load the Asthma Hospitalizations by County data and set the style
+	// using the getStyle and getColor properties below (set by the known
+	// classifications determined by ArcMap).
+	var mnAsthmaCountiesLayer = L.geoJson(mnAsthmaCountiesData,  {
+		style: getStyle
+	}).addTo(map);
+    	
+    // Pop-up for Age-adjusted rates with the County Name.
+    // Shown when the user clicks on a particular County.
+	mnAsthmaCountiesLayer.eachLayer(function(layer) {
+	    var content = '<h3><b>' + layer.feature.properties.NAME + ' County<\/h3><\/b>' +
+	        '<b>Age-adjusted rate:</b> ' + layer.feature.properties.AGEADJUSTRATE + '<\/p>';
+	    layer.bindPopup(content);
+	});
+
+    // Turf: Natural Breaks
+	var jenksNaturalBreaks = turf.jenks(mnAsthmaCountiesData, 'AGEADJUSTRATE', 5);
+		console.log("Natural Breaks: " + jenksNaturalBreaks); //log the Natural Break value in the console log
+	
+	// Turf: Quantile Breaks
+	var quantileBreaks = turf.quantile(mnAsthmaCountiesData, 'AGEADJUSTRATE', [25, 50, 75, 99]);
+		console.log("Quantile Breaks: " + quantileBreaks); //log the break value in the console log
+	
+	// Using the GetColor to show the real Age-adjusted rates, as confirmed
+	// by ArcMap. The <null> values may be throwing off both of the classifications
+	// (breaks) from using Turf.
+	function getStyle(feature) {
+		return {
+			weight: 2,
+			opacity: 0.1,
+			color: 'white',
+			fillOpacity: 0.7,
+			dashArray: '3',
+			fillColor: getColor(feature.properties.AGEADJUSTRATE)
+		};
+	}
+	
+	 function getColor(ageAdjustArcJenks) {
+	     return ageAdjustArcJenks > 12.3 ? '#000' :
+	    	 	ageAdjustArcJenks > 9.2  ? '#ec7014' :
+	          	ageAdjustArcJenks > 6.3  ? '#fe9929' :
+	            ageAdjustArcJenks > 3.2  ? '#fec44f' :
+	            ageAdjustArcJenks > 0.0  ? '#fee391' :
+	          							'#ffffe5' ;
+	  }
+</script>
+
+    <!-- Modal -->
+	<div class="modal fade" id="classificationModal" tabindex="-1" role="dialog" aria-labelledby="classificationModalLabel" aria-hidden="true">
+    	<div class="modal-dialog">
+        	<div class="modal-content">
+            	<div class="modal-header">
+                	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                 	<h4 class="modal-title" id="classificationModalLabel">Classification Values</h4>
+            	</div>
+      			<div class="modal-body">
+                	<div class="panel panel-primary">
+						<div class="panel-heading">Jenks Natural Breaks</div>
+							<ul class="list-group">
+                    			<li class="list-group-item">(null)</li>
+                    			<li class="list-group-item">2.6</li>
+                    			<li class="list-group-item">5.1</li>
+                    			<li class="list-group-item">7.9</li>
+                    			<li class="list-group-item">12.3</li>
+                    		</ul>
+                    </div>
+                    <div class="panel panel-primary">
+                  		<div class="panel-heading">Quantiles</div>
+                  			<ul class="list-group">
+                    			<li class="list-group-item">4.1</li>
+                    			<li class="list-group-item">5.1</li>
+                    			<li class="list-group-item">6.5</li>
+                    			<li class="list-group-item">12.3</li>
+                    		</ul>
+                    </div>
+      			</div>
+      			<div class="modal-footer">
+                	<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            	</div>
+        	</div>
+    	</div>
+	</div><!-- End Modal -->
+
+</body>
+</html>
