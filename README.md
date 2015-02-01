@@ -2,7 +2,9 @@
 
 Hi Lyzi,
 
-Thanks for sharing the <a href="http://lyzidiamond.com/turf-exercise/">Turf.js exercise</a>, it was a lot of fun to work with! :-) Overall, I am a fan of Turf.js but I would definitely not recommend it to anyone who is new to JavaScript or development as it wasn't as intuitive as I was expecting. Hopefully my comments below help in providing more context into why I believe that is the case but if not, feel free to shoot me a message back and I'd be happy to discuss in greater detail. 
+This Github project includes a README.md file (that includes all of my answers below), the JSON file (.js) utilized and all of the code in the index.html page. I've also got a working copy of the <a href="http://geospatialem.github.io/Turf.js-Fun/">final map</a> on Github.
+
+Thank you for sharing the <a href="http://lyzidiamond.com/turf-exercise/">Turf.js exercise</a>, it was a lot of fun to work with! :-) Overall, I am a fan of Turf.js but I would definitely not recommend it to anyone who is new to JavaScript or development as it wasn't as intuitive as I was expecting. Hopefully my comments below help in providing more context into why I believe that is the case but if not, feel free to shoot me a message back and I'd be happy to discuss in greater detail. 
 Again, thank you for sharing this with others in the community, I see this as a great asset with the work I do everyday. :-)
 
 Thanks,
