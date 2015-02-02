@@ -42,4 +42,4 @@ I haven't used the Mapbox API much so I utilized other Mapbox API library resour
 
 __*7. Other Miscellaneous Notes*__
 
-It seemed Turf had issues with field values containing 'null' when determining the classification levels (breaks). Since the data I see everyday has to be suppressed, since it includes private information, this would pose a problem for me utilizing Turf while at work. Knowing a little bit more of the back-end and how Turf runs would be helpful to troubleshoot, or at least, help those with specific datasets understand what is going on 'under the hood'.
+It seemed Turf had issues with field values containing 'null' when determining the classification levels (breaks). Since the data I see everyday has to be suppressed, this would pose a problem for me utilizing Turf while at work. Knowing a little bit more of the back-end and how Turf runs would be helpful to troubleshoot, or at least, help those with specific datasets understand what is going on 'under the hood'.
